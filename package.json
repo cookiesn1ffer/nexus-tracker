@@ -4,13 +4,9 @@
   "description": "Sleek accountability tracker",
   "main": "server/src/index.js",
   "scripts": {
-    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
-    "setup": "npm run install-all && npm run build --prefix client && node -e \"const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')\"",
-    "dev": "concurrently \"npm run dev --prefix client\" \"node server/src/index.js\"",
+    "setup": "npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client && node -e \"const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')\"",
+    "dev": "node scripts/dev.js",
     "build": "npm run build --prefix client && node -e \"const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')\"",
     "start": "node scripts/start.js"
-  },
-  "dependencies": {
-    "concurrently": "^8.2.2"
   }
 }
