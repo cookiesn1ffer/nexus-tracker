@@ -88,21 +88,59 @@ This runs both the React dev server (`localhost:3000`) and the backend (`localho
 
 ---
 
-## Working Copy (No Build Needed)
+## Deploy to Railway (Free Online Hosting)
 
-A pre-built, ready-to-run copy is included in the `working-app/` folder. The frontend is already compiled — just install server dependencies and start.
+Railway offers a free tier with persistent PostgreSQL databases. This is the easiest way to host Nexus Tracker online so your friend can use it too.
+
+### 1. Push to GitHub
 
 ```bash
-cd working-app
-npm install --prefix server
-node server/src/index.js
+git add .
+git commit -m "ready for railway"
+git push
 ```
 
-Then open `http://localhost:5000`.
+### 2. Create Railway Project
 
-Or use the included scripts:
-- **Windows**: Double-click `start.bat`
-- **macOS/Linux**: Run `./start.sh`
+1. Go to [railway.app](https://railway.app) and sign up (GitHub login)
+2. Click **New Project** → **Deploy from GitHub repo**
+3. Select your `nexus-tracker` repository
+4. Railway will auto-detect it's a Node.js app
+
+### 3. Add PostgreSQL Database
+
+1. In your Railway project, click **New** → **Database** → **Add PostgreSQL**
+2. Railway creates the database automatically
+3. The `DATABASE_URL` environment variable is added automatically
+
+### 4. Add Environment Variables
+
+In your Railway project settings, add:
+
+| Variable | Value |
+|----------|-------|
+| `JWT_SECRET` | Any long random string (generate at [jwtsecret.com](https://jwtsecret.com)) |
+
+`DATABASE_URL` is already set by Railway.
+
+### 5. Deploy
+
+Railway auto-deploys on every git push. Your app will be live at a URL like `https://nexus-tracker-production-xyz.up.railway.app`.
+
+### 6. Share with Your Friend
+
+Send them the Railway URL. They can register and use it just like you.
+
+---
+
+## Database Options
+
+| Mode | When Used | Data Persistence |
+|------|-----------|------------------|
+| **SQLite** (default) | Local development, no `DATABASE_URL` set | File-based (`server/nexus.db`) |
+| **PostgreSQL** | Production, `DATABASE_URL` is set | Persistent cloud database |
+
+The app auto-detects which to use. No code changes needed.
 
 ---
 
@@ -119,7 +157,8 @@ Or use the included scripts:
 ### Backend
 - **Node.js** — JavaScript runtime
 - **Express.js** — REST API framework
-- **SQLite** — Lightweight, single-file database
+- **SQLite** — Local development database
+- **PostgreSQL** — Production database (via `pg` driver)
 - **Socket.io** — Real-time updates
 - **jsonwebtoken** — JWT authentication
 - **bcryptjs** — Password hashing

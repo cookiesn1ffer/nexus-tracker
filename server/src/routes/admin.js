@@ -69,10 +69,10 @@ router.get('/stats', authMiddleware, adminMiddleware, async (req, res) => {
     const adminCount = await get('SELECT COUNT(*) as count FROM users WHERE is_admin = 1');
     
     res.json({
-      userCount: userCount.count,
-      logCount: logCount.count,
-      ruleCount: ruleCount.count,
-      adminCount: adminCount.count
+      userCount: parseInt(userCount.count, 10),
+      logCount: parseInt(logCount.count, 10),
+      ruleCount: parseInt(ruleCount.count, 10),
+      adminCount: parseInt(adminCount.count, 10)
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
