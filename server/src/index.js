@@ -38,7 +38,12 @@ app.use('/api/reactions', reactionRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Serving built frontend assets if they exist
-app.use(express.static(path.join(__dirname, '../public')));
+// Handle both dev and packaged (Electron) environments
+const isElectron = !!process.versions.electron;
+const publicDir = isElectron
+  ? path.join(process.resourcesPath, 'server', 'public')
+  : path.join(__dirname, '../public');
+app.use(express.static(publicDir));
 
 // Basic test route
 app.get('/api/test', (req, res) => {
@@ -47,8 +52,9 @@ app.get('/api/test', (req, res) => {
 
 // Wildcard to serve React app
 app.get('*', (req, res) => {
-  if (require('fs').existsSync(path.join(__dirname, '../public/index.html'))) {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+  const indexPath = path.join(publicDir, 'index.html');
+  if (require('fs').existsSync(indexPath)) {
+    res.sendFile(indexPath);
   } else {
     res.status(200).send("Nexus API is running! Frontend is not compiled yet.");
   }
@@ -102,3 +108,5 @@ server.listen(PORT, '0.0.0.0', () => {
   const actualPort = server.address().port;
   console.log(`Server is running on http://0.0.0.0:${actualPort}`);
 });
+
+module.exports = { app, server };
