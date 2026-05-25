@@ -114,7 +114,7 @@ Navigate to `http://localhost:3000`
    - Set **Environment**: `Node`
    - Set **Build Command**:
      ```bash
-     npm install --prefix server && npm install --prefix client --include=dev && npm run build --prefix client && node -e "const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')"
+     npm install --prefix server && npm install --prefix client && npm run build --prefix client && node -e "const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')"
      ```
    - Set **Start Command**:
      ```bash
