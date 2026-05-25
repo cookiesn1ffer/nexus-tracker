@@ -50,35 +50,28 @@
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - npm (comes with Node.js)
 
-### Local Development
+### Clone & Run
 
-**1. Clone the repository**
 ```bash
 git clone https://github.com/yourusername/nexus-tracker.git
 cd nexus-tracker
+npm run setup
+npm start
 ```
 
-**2. Install dependencies**
-```bash
-npm run install-all
-```
-This installs dependencies for the root, server, and client in one command.
+Then open `http://localhost:5000`.
 
-**3. Start the backend**
-```bash
-node server/src/index.js
-```
-Server runs on `http://localhost:5000`
+The `setup` command installs all dependencies and builds the frontend once. After that, `npm start` will launch the server directly.
 
-**4. Start the frontend (in a new terminal)**
+### Development Mode
+
+For active development with hot reload:
+
 ```bash
-cd client
 npm run dev
 ```
-Frontend runs on `http://localhost:3000`
 
-**5. Open in browser**
-Navigate to `http://localhost:3000`
+This runs both the React dev server (`localhost:3000`) and the backend (`localhost:5000`) simultaneously.
 
 ---
 
