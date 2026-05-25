@@ -1,14 +1,12 @@
 {
   "name": "nexus-tracker",
   "version": "1.0.0",
-  "description": "Nexus Tracker - Desktop Accountability App",
+  "description": "Nexus Tracker - Desktop Accountability App with Cloud Database",
   "main": "electron/main.js",
   "scripts": {
-    "setup": "npm install && npm install --prefix server && npm install --prefix client",
     "build:client": "npm run build --prefix client && powershell -Command \"if (Test-Path 'server/public') { Remove-Item -LiteralPath 'server/public' -Recurse -Force }; New-Item -ItemType Directory -Path 'server/public' -Force | Out-Null; Copy-Item -Path 'client/dist/*' -Destination 'server/public/' -Recurse -Force\"",
-    "build:win": "npm run build:client && electron-builder --win",
-    "start": "electron .",
-    "dev": "electron . --dev"
+    "build:win": "npm run build:client && npx electron-builder --win",
+    "start": "electron ."
   },
   "build": {
     "appId": "com.nexustracker.app",
@@ -31,16 +29,10 @@
     "win": {
       "target": [
         {
-          "target": "zip",
+          "target": "portable",
           "arch": ["x64"]
         }
       ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
