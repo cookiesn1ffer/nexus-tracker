@@ -1,28 +1,33 @@
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 
-const publicDir = path.join(__dirname, '..', 'server', 'public');
+const root = path.join(__dirname, '..');
+const publicDir = path.join(root, 'server', 'public');
 const indexHtml = path.join(publicDir, 'index.html');
 
-// If built frontend doesn't exist, build it
 if (!fs.existsSync(indexHtml)) {
   console.log('Frontend build not found. Building client...');
   try {
-    execSync('npm run build --prefix client', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
-    
-    // Move dist to server/public
+    execSync('npm run build --prefix client', { stdio: 'inherit', cwd: root });
     if (fs.existsSync(publicDir)) {
       fs.rmSync(publicDir, { recursive: true });
     }
-    fs.renameSync(path.join(__dirname, '..', 'client', 'dist'), publicDir);
-    console.log('Build complete. Starting server...');
+    fs.renameSync(path.join(root, 'client', 'dist'), publicDir);
+    console.log('Build complete.');
   } catch (err) {
     console.error('Build failed:', err.message);
     process.exit(1);
   }
 }
 
-// Start the server
-console.log('Starting Nexus Tracker server...');
-require('../server/src/index.js');
+console.log('Starting Nexus Tracker on http://localhost:5000 ...\n');
+
+const server = spawn('node', [path.join(root, 'server', 'src', 'index.js')], {
+  cwd: root,
+  stdio: 'inherit'
+});
+
+server.on('exit', (code) => process.exit(code || 0));
+process.on('SIGINT', () => { server.kill(); process.exit(0); });
+process.on('SIGTERM', () => { server.kill(); process.exit(0); });
