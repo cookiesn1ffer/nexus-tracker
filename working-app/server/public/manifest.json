@@ -1,0 +1,17 @@
+{
+  "short_name": "Nexus",
+  "name": "Nexus Accountability Tracker",
+  "description": "Track progress and hold each other accountable with friends",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/nexus-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}

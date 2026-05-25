@@ -95,53 +95,21 @@ Navigate to `http://localhost:3000`
 
 ---
 
-## Deployment
+## Working Copy (No Build Needed)
 
-### Deploy to Render.com (Recommended — Free)
-
-1. **Push to GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/nexus-tracker.git
-   git push -u origin main
-   ```
-
-2. **Create a New Web Service on [Render](https://render.com)**
-   - Connect your GitHub repository
-   - Set **Environment**: `Node`
-   - Set **Build Command**:
-     ```bash
-     npm install --prefix server && npm install --prefix client && npm run build --prefix client && node -e "const fs=require('fs'); if(fs.existsSync('server/public')) fs.rmSync('server/public', {recursive:true}); fs.renameSync('client/dist', 'server/public')"
-     ```
-   - Set **Start Command**:
-     ```bash
-     node server/src/index.js
-     ```
-   - Add **Environment Variable**: `JWT_SECRET` = a strong random string
-
-3. **Click "Create Web Service"**
-   Render will give you a public URL like `https://nexus-tracker-xyz.onrender.com`
-
-4. **Share the URL** with your friend — works on iPhone, Android, PC, and Mac
-
-### Alternative: Railway, Fly.io, Heroku
-
-The app is a single Express server that serves both the API and the static React build. Any platform that supports Node.js can run it. Just ensure the build step compiles the client and moves `client/dist` to `server/public`.
-
-### VPS (DigitalOcean, Hetzner, etc.)
+A pre-built, ready-to-run copy is included in the `working-app/` folder. The frontend is already compiled — just install server dependencies and start.
 
 ```bash
-git clone https://github.com/yourusername/nexus-tracker.git
-cd nexus-tracker
-npm run install-all
-npm run build
-npm start
+cd working-app
+npm install --prefix server
+node server/src/index.js
 ```
 
-For production, use PM2 and nginx as a reverse proxy.
+Then open `http://localhost:5000`.
+
+Or use the included scripts:
+- **Windows**: Double-click `start.bat`
+- **macOS/Linux**: Run `./start.sh`
 
 ---
 
