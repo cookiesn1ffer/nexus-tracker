@@ -99,5 +99,6 @@ io.on('connection', (socket) => {
 app.set('io', io);
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on http://0.0.0.0:${PORT}`);
+  const actualPort = server.address().port;
+  console.log(`Server is running on http://0.0.0.0:${actualPort}`);
 });
