@@ -9,9 +9,18 @@ let sqliteDb = null;
 // Initialize PostgreSQL
 function initPg() {
   const { Pool } = require('pg');
+  // Strip sslmode from connection string so pg doesn't enforce cert validation
+  // We handle SSL config ourselves for self-signed certs (Aiven, etc.)
+  let connStr = process.env.DATABASE_URL;
+  if (connStr.includes('sslmode=')) {
+    connStr = connStr.replace(/[?&]sslmode=[^&]+/, '').replace(/\?$/, '');
+  }
+  const sslConfig = connStr.includes('localhost')
+    ? false
+    : { rejectUnauthorized: false };
   pgPool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
+    connectionString: connStr,
+    ssl: sslConfig
   });
 }
 
