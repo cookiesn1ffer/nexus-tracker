@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+.DS_Store
+Thumbs.db
+server/public/
