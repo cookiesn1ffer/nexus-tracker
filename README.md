@@ -1,167 +1,373 @@
 # Nexus Tracker
 
-> A minimal, black-and-white accountability tracker for remote friends. Set ground rules, track daily progress, log writeups, and compete on streaks — all in real-time, across any device.
+> A minimal, offline-first personal accountability tracker built with Flutter. Set ground rules, track daily progress, log writeups, and build streaks — no login, no cloud, 100% local. Works on every device.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shaps.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.2-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwindcss&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-3.24-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.5-0175C2?logo=dart&logoColor=white)
 
 ---
 
 ## Features
 
-### Dual Accountability System
-- Create shared **Ground Rules** (habits, targets, milestones)
-- Each user gets their own **personal checklist** of those rules
-- Track who did what with a real-time **activity feed**
-- Never break the chain with **streak counters**
-
-### Progress Writeups
-- Log detailed progress notes with **rich text support**
-- Tag entries with `#success`, `#blocker`, `#milestone`
-- Shared notebook that both users can read and contribute to
-- Author protection — only you can delete your own writeups
-
-### Visual Analytics
-- **Progress ring** showing daily completion percentage
-- **Streak comparison** — your streak vs. your friend's streak
-- **60-day consistency heatmap** (GitHub-style contribution grid)
-- **Completion bar chart** comparing total checks
-
-### Minimal Design
-- **Pure black & white** — no color, no noise
-- **Clean typography** with Inter
-- **Fully responsive** — bottom nav on mobile, sidebar on desktop
-- **Zero-config deployment** — single Express app serves everything
-
-### Secure & Simple Auth
-- JWT-based authentication with 30-day sessions
-- Passwords hashed with bcrypt
-- Auto-login on return visits
+- **No login required** — opens straight to your dashboard
+- **Ground Rules** — create daily / weekly / one-time habits
+- **Checklist tracking** — tap to check off, earn XP
+- **Streak counter** — never break the chain
+- **Writeups** — log progress notes with tags
+- **Activity feed** — see your recent actions
+- **Analytics** — 60-day heatmap, stats, level progress
+- **100% offline** — everything stored locally via embedded database
+- **Reset Data** — start fresh anytime from the sidebar menu
+- **Cross-platform** — Windows, Linux, macOS, Android, iOS, Web
 
 ---
 
-## Quick Start
+## Screenshots
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- npm (comes with Node.js)
+| Dashboard | Ground Rules | Writeups | Analytics |
+|-----------|-------------|----------|-----------|
+| Checklist + streaks | Create/manage rules | Notebook | Heatmap + stats |
 
-### Clone & Run
+---
+
+## Table of Contents
+
+1. [Quick Start (All Platforms)](#quick-start-all-platforms)
+2. [Windows](#windows)
+3. [Linux](#linux)
+4. [macOS](#macos)
+5. [Android](#android)
+6. [iOS](#ios)
+7. [Web](#web)
+8. [Development](#development)
+9. [Reset Your Data](#reset-your-data)
+10. [Project Structure](#project-structure)
+11. [Upload to GitHub](#upload-to-github)
+12. [License](#license)
+
+---
+
+## Quick Start (All Platforms)
+
+### Prerequisites (every OS)
+
+- [Flutter SDK 3.24+](https://docs.flutter.dev/get-started/install) — install for your OS
+- [Git](https://git-scm.com/)
+
+Verify Flutter is installed:
+
+```bash
+flutter --version
+flutter doctor
+```
+
+### Clone the repo
 
 ```bash
 git clone https://github.com/yourusername/nexus-tracker.git
 cd nexus-tracker
-npm run setup
-npm start
+flutter pub get
 ```
 
-Then open `http://localhost:5000`.
+Now pick your platform below.
 
-The `setup` command installs all dependencies and builds the frontend once. After that, `npm start` will launch the server directly.
+---
 
-### Development Mode
+## Windows
 
-For active development with hot reload:
+### Step 1: Enable Developer Mode
+
+Windows needs Developer Mode so Flutter can create symlinks during the build.
+
+1. Press `Win + I` → `Privacy & security` → `For developers`
+2. Toggle **Developer Mode** to **On**
+3. Restart your terminal
+
+### Step 2: Install Visual Studio Build Tools
+
+Download and install **Visual Studio 2022** with the **"Desktop development with C++"** workload:
+https://visualstudio.microsoft.com/downloads/
+
+### Step 3: Build
 
 ```bash
-npm run dev
+cd nexus-tracker
+
+# Build release executable
+flutter build windows --release
 ```
 
-This runs both the React dev server (`localhost:3000`) and the backend (`localhost:5000`) simultaneously.
-
----
-
-## Usage
-
-### For You and Your Friend
-
-1. **Register** — Both users create separate accounts with unique usernames
-2. **Create Ground Rules** — Go to the "Ground Rules" tab and add shared rules (e.g., *Code 1 hour*, *Read 30 min*, *Workout*)
-3. **Track Daily** — Check off rules on the Dashboard as you complete them
-4. **Log Writeups** — Post progress notes with the Quick Writeup Logger or the full Writeups tab
-5. **Stay Consistent** — Watch your streak counter grow on the Analytics page
-6. **Compete & Collaborate** — See who did what in the real-time activity feed
-
----
-
-## Deploy to Railway (Free Online Hosting)
-
-Railway offers a free tier with persistent PostgreSQL databases. This is the easiest way to host Nexus Tracker online so your friend can use it too.
-
-### 1. Push to GitHub
+### Step 4: Run
 
 ```bash
-git add .
-git commit -m "ready for railway"
-git push
+# Run without installing
+flutter run -d windows
+
+# Or launch the built .exe directly
+build/windows/x64/runner/Release/nexus_tracker.exe
 ```
 
-### 2. Create Railway Project
+### Step 5: Create an Installer (optional)
 
-1. Go to [railway.app](https://railway.app) and sign up (GitHub login)
-2. Click **New Project** → **Deploy from GitHub repo**
-3. Select your `nexus-tracker` repository
-4. Railway will auto-detect it's a Node.js app
+1. Download [Inno Setup](https://jrsoftware.org/isinfo.php)
+2. Open `installer/setup.iss`
+3. Click **Build**
+4. The installer will be at:
+   ```
+   dist/Nexus Tracker Setup 1.0.0.exe
+   ```
 
-### 3. Add PostgreSQL Database
+### Data Location
 
-1. In your Railway project, click **New** → **Database** → **Add PostgreSQL**
-2. Railway creates the database automatically
-3. The `DATABASE_URL` environment variable is added automatically
-
-### 4. Add Environment Variables
-
-In your Railway project settings, add:
-
-| Variable | Value |
-|----------|-------|
-| `JWT_SECRET` | Any long random string (generate at [jwtsecret.com](https://jwtsecret.com)) |
-
-`DATABASE_URL` is already set by Railway.
-
-### 5. Deploy
-
-Railway auto-deploys on every git push. Your app will be live at a URL like `https://nexus-tracker-production-xyz.up.railway.app`.
-
-### 6. Share with Your Friend
-
-Send them the Railway URL. They can register and use it just like you.
+```
+%APPDATA%\com.nexustracker.app\
+```
 
 ---
 
-## Database Options
+## Linux
 
-| Mode | When Used | Data Persistence |
-|------|-----------|------------------|
-| **SQLite** (default) | Local development, no `DATABASE_URL` set | File-based (`server/nexus.db`) |
-| **PostgreSQL** | Production, `DATABASE_URL` is set | Persistent cloud database |
+### Step 1: Install build dependencies
 
-The app auto-detects which to use. No code changes needed.
+**Ubuntu / Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev liblzma-dev
+```
+
+**Fedora:**
+```bash
+sudo dnf install -y clang cmake ninja-build pkgconfig gtk3-devel libblkid-devel lzma-devel
+```
+
+**Arch:**
+```bash
+sudo pacman -S clang cmake ninja pkgconf gtk3 util-linux-libs
+```
+
+### Step 2: Build
+
+```bash
+cd nexus-tracker
+
+# Build release
+flutter build linux --release
+```
+
+### Step 3: Run
+
+```bash
+# Run directly
+flutter run -d linux
+
+# Or run the built binary
+build/linux/x64/release/bundle/nexus_tracker
+```
+
+### Data Location
+
+```
+~/.local/share/com.nexustracker.app/
+```
 
 ---
 
-## Tech Stack
+## macOS
 
-### Frontend
-- **React 18** — Component-based UI
-- **Vite** — Ultra-fast build tool
-- **TypeScript** — Type-safe development
-- **Tailwind CSS** — Utility-first styling
-- **Lucide React** — Minimal iconography
-- **Recharts** — Comparative charts
+### Step 1: Install Xcode Command Line Tools
 
-### Backend
-- **Node.js** — JavaScript runtime
-- **Express.js** — REST API framework
-- **SQLite** — Local development database
-- **PostgreSQL** — Production database (via `pg` driver)
-- **Socket.io** — Real-time updates
-- **jsonwebtoken** — JWT authentication
-- **bcryptjs** — Password hashing
+```bash
+xcode-select --install
+```
+
+### Step 2: Build
+
+```bash
+cd nexus-tracker
+
+# Build release
+flutter build macos --release
+```
+
+### Step 3: Run
+
+```bash
+# Run directly
+flutter run -d macos
+
+# Or open the built .app
+open build/macos/Build/Products/Release/nexus_tracker.app
+```
+
+### Data Location
+
+```
+~/Library/Application Support/com.nexustracker.app/
+```
+
+---
+
+## Android
+
+### Step 1: Install Android Studio
+
+Download and install [Android Studio](https://developer.android.com/studio).
+
+Open Android Studio → SDK Manager → SDK Tools → check:
+- Android SDK Command-line Tools (latest)
+- Android SDK Build-Tools
+- Android Emulator (optional)
+
+### Step 2: Accept licenses
+
+```bash
+flutter doctor --android-licenses
+```
+
+Press `y` to accept all licenses.
+
+### Step 3: Build APK
+
+```bash
+cd nexus-tracker
+
+# Build release APK
+flutter build apk --release
+```
+
+The APK will be at:
+```
+build/app/outputs/flutter-apk/app-release.apk
+```
+
+### Step 4: Install on device
+
+```bash
+# With a phone connected via USB (enable USB debugging first)
+flutter run -d <your-device-id>
+
+# Or install the APK manually
+adb install build/app/outputs/flutter-apk/app-release.apk
+```
+
+### Data Location
+
+```
+Android/data/com.nexustracker.app/files/
+```
+
+---
+
+## iOS
+
+**You need a Mac with Xcode to build for iOS.**
+
+### Step 1: Install Xcode
+
+Download from the Mac App Store or [Apple Developer](https://developer.apple.com/download/).
+
+### Step 2: Install CocoaPods
+
+```bash
+sudo gem install cocoapods
+```
+
+### Step 3: Build
+
+```bash
+cd nexus-tracker
+
+# Install iOS pods
+cd ios && pod install && cd ..
+
+# Build
+flutter build ios --release
+```
+
+### Step 4: Run on device or simulator
+
+```bash
+# Run on connected iPhone
+flutter run -d ios
+
+# Or open in Xcode to sign and deploy
+open ios/Runner.xcworkspace
+```
+
+### Data Location
+
+```
+~/Library/Containers/com.nexustracker.app/
+```
+
+---
+
+## Web
+
+### Step 1: Build
+
+```bash
+cd nexus-tracker
+
+# Build for web
+flutter build web --release
+```
+
+### Step 2: Serve locally or deploy
+
+```bash
+# Serve locally (requires a simple HTTP server)
+cd build/web
+python3 -m http.server 8080
+
+# Now open http://localhost:8080 in your browser
+```
+
+Or deploy to any static hosting: GitHub Pages, Netlify, Vercel, Firebase Hosting, etc.
+
+> **Note:** Web storage uses the browser's IndexedDB. Data is tied to the browser and domain. Different browsers won't share data.
+
+---
+
+## Development
+
+```bash
+# Run in debug mode with hot reload
+flutter run
+
+# Hot reload: press `r` in the terminal
+# Hot restart: press `R`
+# Quit: press `q`
+
+# Check for issues
+flutter analyze
+
+# Format code
+flutter format lib/
+```
+
+---
+
+## Reset Your Data
+
+You can reset all app data without touching files manually:
+
+1. Click **Reset Data** in the desktop sidebar, or the **⋮ menu** on mobile
+2. Confirm the dialog
+3. All rules, checklists, writeups, and progress are wiped
+4. The app restarts with a clean empty database
+
+**To manually delete data:**
+
+| OS | Path |
+|---|---|
+| Windows | `%APPDATA%\com.nexustracker.app\` |
+| Linux | `~/.local/share/com.nexustracker.app/` |
+| macOS | `~/Library/Application Support/com.nexustracker.app/` |
+| Android | `Android/data/com.nexustracker.app/files/` |
+| iOS | `~/Library/Containers/com.nexustracker.app/` |
+| Web | Browser DevTools → Application → IndexedDB → Delete |
 
 ---
 
@@ -169,124 +375,166 @@ The app auto-detects which to use. No code changes needed.
 
 ```
 nexus-tracker/
-├── package.json                  # Root orchestration scripts
-├── server/
-│   ├── package.json
-│   ├── .env.example              # Environment variable template
-│   ├── src/
-│   │   ├── index.js              # Express server entry point
-│   │   ├── db.js                 # SQLite database layer
-│   │   ├── auth_utils.js         # JWT secret management
-│   │   ├── middleware/
-│   │   │   └── auth.js           # JWT verification middleware
-│   │   └── routes/
-│   │       ├── auth.js           # POST /register, POST /login, GET /me
-│   │       ├── rules.js          # CRUD for shared ground rules
-│   │       ├── checklists.js     # GET /, POST /toggle
-│   │       ├── writeups.js       # CRUD for progress notes
-│   │       ├── stats.js          # Streaks, heatmap, activity feed
-│   │       ├── gamification.js   # XP, levels, achievements
-│   │       ├── reactions.js      # Emoji reactions
-│   │       └── admin.js          # Admin panel endpoints
-│   └── nexus.db                  # SQLite database (auto-created)
-└── client/
-    ├── package.json
-    ├── vite.config.ts            # Dev proxy: /api → localhost:5000
-    ├── tailwind.config.js        # Minimal dark theme
-    ├── index.html
-    └── src/
-        ├── main.tsx
-        ├── App.tsx               # Auth router + layout switcher
-        ├── api.ts                # Fetch wrapper with JWT auto-injection
-        ├── index.css             # Tailwind + minimal utilities
-        ├── context/
-        │   ├── AuthContext.tsx    # Global auth state + auto-login
-        │   └── ThemeContext.tsx   # Sound preferences
-        ├── components/
-        │   ├── Layout.tsx         # Sidebar (desktop) + Bottom nav (mobile)
-        │   ├── ProgressRing.tsx   # Animated SVG completion ring
-        │   └── ErrorBoundary.tsx  # Error fallback UI
-        └── views/
-            ├── Login.tsx          # Minimal login/register screen
-            ├── Dashboard.tsx      # Checklist, streaks, feed, quick logger
-            ├── RulesManager.tsx   # Create/manage ground rules
-            ├── WriteupsBoard.tsx  # Full shared notebook
-            ├── Analytics.tsx      # Stats, heatmaps, comparison charts
-            └── AdminDashboard.tsx # User management panel
+├── android/              # Android runner
+│   ├── app/
+│   │   ├── build.gradle
+│   │   └── src/main/
+│   │       ├── AndroidManifest.xml
+│   │       ├── kotlin/com/nexustracker/app/MainActivity.kt
+│   │       └── res/
+│   └── build.gradle
+├── ios/                  # iOS runner (generated on Mac)
+├── linux/                # Linux runner
+│   ├── CMakeLists.txt
+│   ├── main.cc
+│   ├── my_application.cc
+│   └── my_application.h
+├── macos/                # macOS runner
+│   ├── CMakeLists.txt
+│   ├── Runner/
+│   │   ├── AppDelegate.swift
+│   │   ├── Info.plist
+│   │   └── MainFlutterWindow.swift
+│   └── Flutter/
+├── web/                  # Web runner
+│   ├── index.html
+│   └── manifest.json
+├── windows/              # Windows runner
+│   ├── CMakeLists.txt
+│   └── runner/
+│       └── resources/app_icon.ico
+├── lib/                  # All Dart source code
+│   ├── main.dart
+│   ├── database/
+│   │   └── db_helper.dart
+│   ├── models/
+│   │   └── models.dart
+│   ├── providers/
+│   │   └── app_state.dart
+│   ├── screens/
+│   │   ├── dashboard.dart
+│   │   ├── rules_manager.dart
+│   │   ├── writeups_board.dart
+│   │   └── analytics.dart
+│   └── widgets/
+│       ├── layout.dart
+│       └── progress_ring.dart
+├── installer/
+│   └── setup.iss         # Inno Setup script (Windows)
+├── pubspec.yaml          # Dependencies
+├── LICENSE
+└── README.md
 ```
 
 ---
 
-## API Endpoints
+## Upload to GitHub
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Create new account | No |
-| POST | `/api/auth/login` | Authenticate and get JWT | No |
-| GET | `/api/auth/me` | Get current user profile | Yes |
-| GET | `/api/rules` | List all ground rules | Yes |
-| POST | `/api/rules` | Create a new ground rule | Yes |
-| DELETE | `/api/rules/:id` | Delete a ground rule | Yes |
-| GET | `/api/checklists?date=YYYY-MM-DD` | Get completions for date | Yes |
-| POST | `/api/checklists/toggle` | Toggle rule completion | Yes |
-| GET | `/api/writeups` | List all writeups | Yes |
-| POST | `/api/writeups` | Create a writeup | Yes |
-| DELETE | `/api/writeups/:id` | Delete own writeup | Yes |
-| GET | `/api/stats` | Get stats, streaks, feed | Yes |
-| GET | `/api/gamification/me` | Get XP, level, achievements | Yes |
-| GET | `/api/gamification/leaderboard` | Get XP leaderboard | Yes |
-| POST | `/api/reactions` | Add emoji reaction | Yes |
-| GET | `/api/admin/users` | List all users | Admin |
-| DELETE | `/api/admin/users/:id` | Delete a user | Admin |
-| POST | `/api/admin/users/:id/toggle-admin` | Toggle admin status | Admin |
-| GET | `/api/admin/stats` | Global system stats | Admin |
-
----
-
-## Environment Variables
-
-Copy `.env.example` to `.env` in the `/server` directory:
+### Step 1: Initialize Git (if not already)
 
 ```bash
-cp server/.env.example server/.env
+cd nexus-tracker
+
+# Initialize git repo
+git init
+
+# Add all files
+git add .
+
+# Commit
+git commit -m "Initial commit: Nexus Tracker Flutter app"
 ```
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `JWT_SECRET` | **Yes** (production) | Random per restart | Secret for signing JWT tokens |
-| `PORT` | No | `5000` | Server port |
+### Step 2: Create a GitHub repo
 
-**Important:** If `JWT_SECRET` is not set, the server generates a random secret at runtime. This is secure, but every user will be logged out on every server restart or redeploy. Always set a persistent `JWT_SECRET` in production.
+1. Go to [github.com/new](https://github.com/new)
+2. Repository name: `nexus-tracker`
+3. Description: `Personal accountability tracker built with Flutter`
+4. Choose **Public** or **Private**
+5. **Do NOT** initialize with README, .gitignore, or License (we already have those)
+6. Click **Create repository**
 
----
+### Step 3: Push your code
 
-## Contributing
+Copy the commands from the GitHub page, or run:
 
-Contributions are welcome! Here's how to get started:
+```bash
+# Replace with your actual username
+git remote add origin https://github.com/YOUR_USERNAME/nexus-tracker.git
 
-1. **Fork** the repository
-2. **Create a branch**: `git checkout -b feature/amazing-thing`
-3. **Make your changes** and test locally
-4. **Commit**: `git commit -m "feat: add amazing thing"`
-5. **Push**: `git push origin feature/amazing-thing`
-6. **Open a Pull Request**
+# Push to main branch
+git branch -M main
+git push -u origin main
+```
 
-### Ideas for Contributions
-- Push notifications for streak reminders
-- Export data to CSV/JSON
-- Multiple accountability groups
-- OAuth login (GitHub, Google)
-- PWA support for offline access
+If you use SSH:
+
+```bash
+git remote add origin git@github.com:YOUR_USERNAME/nexus-tracker.git
+git branch -M main
+git push -u origin main
+```
+
+### Step 4: Add a release (optional)
+
+After building:
+
+1. On GitHub, go to **Releases** → **Create a new release**
+2. Tag version: `v1.0.0`
+3. Title: `Nexus Tracker 1.0.0`
+4. Description: paste your release notes
+5. Attach your built files:
+   - `dist/Nexus Tracker Setup 1.0.0.exe` (Windows installer)
+   - `build/app/outputs/flutter-apk/app-release.apk` (Android APK)
+6. Click **Publish release**
 
 ---
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+[MIT License](LICENSE)
 
 ---
 
-## Acknowledgments
+## Troubleshooting
 
-- Built for remote friends who want to hold each other accountable
-- Inspired by GitHub's contribution graph for consistency visualization
+### `flutter` command not found
+
+Add Flutter to your PATH:
+
+**Windows:**
+- `Win + I` → System → About → Advanced system settings
+- Environment Variables → Path → Edit → New
+- Add: `C:\dev\flutter\bin`
+
+**Linux / macOS:**
+Add to `~/.bashrc` or `~/.zshrc`:
+```bash
+export PATH="$PATH:/path/to/flutter/bin"
+```
+
+### Windows build fails with "symlink support"
+
+Developer Mode is not enabled. See [Windows section](#windows) Step 1.
+
+### Android build fails with "license" error
+
+Run:
+```bash
+flutter doctor --android-licenses
+```
+
+Accept all licenses.
+
+### iOS build fails with CocoaPods
+
+```bash
+cd ios
+pod install --repo-update
+cd ..
+flutter build ios
+```
+
+### Data not clearing after reinstall
+
+Flutter stores data in the OS user data directory, not the app bundle. Delete the data folder for your OS from the [Reset Your Data](#reset-your-data) table.

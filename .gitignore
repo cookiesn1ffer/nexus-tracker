@@ -1,10 +1,55 @@
-node_modules/
-dist/
-.env
-*.db
-*.db-shm
-*.db-wal
-*.db-journal
+# Flutter
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# Android
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/app/*.keystore
+android/key.properties
+*.jks
+
+# iOS / macOS
+ios/Flutter/.last_build_id
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/.symlinks/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/DerivedData/
+ios/build/
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/build/
+
+# Web
+web/.dart_tool/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
 Thumbs.db
-server/public/
+*.log
+
+# Coverage
+coverage/
+
+# Symbols
+app.*.symbols
