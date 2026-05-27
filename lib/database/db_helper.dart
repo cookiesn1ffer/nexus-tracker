@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import '../models/models.dart';
+import '../constants.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -80,6 +81,17 @@ class DatabaseHelper {
     });
   }
 
+  Future<void> updateRule(int id, String title, String description, String frequency, String difficulty) async {
+    final db = await database;
+    final store = intMapStoreFactory.store('rules');
+    await store.update(db, {
+      'title': title,
+      'description': description,
+      'frequency': frequency,
+      'difficulty': difficulty,
+    }, finder: Finder(filter: Filter.equals(Field.key, id)));
+  }
+
   Future<void> deleteRule(int id) async {
     final db = await database;
     final store = intMapStoreFactory.store('rules');
@@ -116,7 +128,7 @@ class DatabaseHelper {
     if (existing != null) {
       await store.delete(db,
           finder: Finder(filter: Filter.equals(Field.key, existing.key)));
-      await _awardXP(-25);
+      await _awardXP(AppXP.checklistUndo);
       return {'checked': false, 'ruleId': ruleId};
     } else {
       await store.add(db, {
@@ -125,7 +137,7 @@ class DatabaseHelper {
         'completed_date': date,
         'completed_at': DateTime.now().toIso8601String(),
       });
-      final xpResult = await _awardXP(25);
+      final xpResult = await _awardXP(AppXP.checklistComplete);
       return {'checked': true, 'ruleId': ruleId, 'xpResult': xpResult};
     }
   }
@@ -157,6 +169,16 @@ class DatabaseHelper {
       'tags': tags,
       'created_at': DateTime.now().toIso8601String(),
     });
+  }
+
+  Future<void> updateWriteup(int id, String title, String content, String? tags) async {
+    final db = await database;
+    final store = intMapStoreFactory.store('writeups');
+    await store.update(db, {
+      'title': title,
+      'content': content,
+      'tags': tags,
+    }, finder: Finder(filter: Filter.equals(Field.key, id)));
   }
 
   Future<void> deleteWriteup(int id) async {
@@ -291,11 +313,11 @@ class DatabaseHelper {
       return Achievement.fromMap(map);
     }).toList();
 
-    final nextLevelXP = level * 100;
-    final currentLevelBase = (level - 1) * 100;
+    final nextLevelXP = AppXP.xpForLevel(level);
+    final currentLevelBase = AppXP.xpForCurrentLevel(level);
     final progress = totalXP >= nextLevelXP
         ? 1.0
-        : (totalXP - currentLevelBase) / 100;
+        : (totalXP - currentLevelBase) / AppXP.levelBase;
 
     return GamificationData(
       totalXP: totalXP,
@@ -318,7 +340,7 @@ class DatabaseHelper {
 
     totalXP += amount;
     final oldLevel = level;
-    while (totalXP >= level * 100) {
+    while (totalXP >= AppXP.xpForLevel(level)) {
       level++;
     }
 
@@ -329,12 +351,11 @@ class DatabaseHelper {
       }, finder: Finder(filter: Filter.equals(Field.key, record.key)));
     }
 
-    // Check achievements
-    if (totalXP >= 100 && !(await _hasAchievement('first_100')))
+    if (totalXP >= AppXP.achievementCentury && !(await _hasAchievement('first_100')))
       await _unlockAchievement('first_100', 'Century', '100');
-    if (totalXP >= 500 && !(await _hasAchievement('first_500')))
+    if (totalXP >= AppXP.achievementHighRoller && !(await _hasAchievement('first_500')))
       await _unlockAchievement('first_500', 'High Roller', 'dice');
-    if (level >= 5 && !(await _hasAchievement('level_5')))
+    if (level >= AppXP.achievementVeteranLevel && !(await _hasAchievement('level_5')))
       await _unlockAchievement('level_5', 'Veteran', 'medal');
 
     return {

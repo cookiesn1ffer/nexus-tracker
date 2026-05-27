@@ -80,6 +80,17 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Future<void> updateRule(int id, String title, String description, String frequency, String difficulty) async {
+    try {
+      await _db.updateRule(id, title, description, frequency, difficulty);
+      _rules = await _db.getAllRules();
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
   Future<void> deleteRule(int id) async {
     try {
       await _db.deleteRule(id);
@@ -104,6 +115,17 @@ class AppState extends ChangeNotifier {
   Future<void> addWriteup(String title, String content, String? tags) async {
     try {
       await _db.insertWriteup(title, content, tags);
+      _writeups = await _db.getAllWriteups();
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateWriteup(int id, String title, String content, String? tags) async {
+    try {
+      await _db.updateWriteup(id, title, content, tags);
       _writeups = await _db.getAllWriteups();
       notifyListeners();
     } catch (e) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../constants.dart';
+import '../widgets/common.dart';
 
 class WriteupsBoardScreen extends StatefulWidget {
   const WriteupsBoardScreen({super.key});
@@ -14,6 +16,7 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
   final _contentController = TextEditingController();
   final _tagsController = TextEditingController();
   bool _showForm = false;
+  int? _editingWriteupId;
 
   @override
   void initState() {
@@ -31,12 +34,32 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
     super.dispose();
   }
 
+  void _startEdit(dynamic writeup) {
+    setState(() {
+      _editingWriteupId = writeup.id;
+      _titleController.text = writeup.title;
+      _contentController.text = writeup.content;
+      _tagsController.text = writeup.tags ?? '';
+      _showForm = true;
+    });
+  }
+
+  void _cancelForm() {
+    setState(() {
+      _showForm = false;
+      _editingWriteupId = null;
+      _titleController.clear();
+      _contentController.clear();
+      _tagsController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (context, state, child) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppDimensions.paddingScreen),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,36 +67,25 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Notebook',
+                    AppStrings.notebook,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                      color: AppColors.textPrimary,
+                      fontSize: AppDimensions.fontSizeHeading,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
                     ),
                   ),
-                  ElevatedButton.icon(
+                  AppButton(
+                    text: _showForm ? AppStrings.cancel : AppStrings.newWriteup,
+                    icon: _showForm ? Icons.close : Icons.add,
+                    isPrimary: !_showForm,
                     onPressed: () {
-                      setState(() => _showForm = !_showForm);
+                      if (_showForm) {
+                        _cancelForm();
+                      } else {
+                        setState(() => _showForm = true);
+                      }
                     },
-                    icon: Icon(
-                      _showForm ? Icons.close : Icons.add,
-                      size: 16,
-                    ),
-                    label: Text(_showForm ? 'Cancel' : 'New Writeup'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _showForm
-                          ? Colors.white.withOpacity(0.1)
-                          : Colors.white,
-                      foregroundColor: _showForm ? Colors.white : Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -81,8 +93,8 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
               Text(
                 'Log progress diaries, design briefs, snippets, and blockers.',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.4),
-                  fontSize: 13,
+                  color: AppColors.textMuted,
+                  fontSize: AppDimensions.fontSizeMedium,
                 ),
               ),
               if (_showForm) ...[
@@ -98,15 +110,15 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
                       children: [
                         Icon(
                           Icons.menu_book_outlined,
-                          size: 48,
-                          color: Colors.white.withOpacity(0.1),
+                          size: AppDimensions.iconXL,
+                          color: AppColors.iconSubtle,
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'The notebook is empty. Post the first update!',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.3),
-                            fontSize: 14,
+                            color: AppColors.textFaint,
+                            fontSize: AppDimensions.fontSizeLarge,
                           ),
                         ),
                       ],
@@ -132,64 +144,74 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
   }
 
   Widget _buildForm(AppState state) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.06)),
-      ),
+    final isEditing = _editingWriteupId != null;
+    return AppCard(
+      borderRadius: AppDimensions.borderRadiusXL,
+      padding: const EdgeInsets.all(AppDimensions.paddingXL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'New Writeup',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+          Text(
+            isEditing ? AppStrings.editWriteup : AppStrings.newWriteup,
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: AppDimensions.fontSizeTitle,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
-          _buildTextField(_titleController, 'Title...'),
+          const SizedBox(height: AppDimensions.paddingLarge),
+          AppTextField(
+            controller: _titleController,
+            hint: 'Title...',
+          ),
           const SizedBox(height: 10),
-          _buildTextField(
-            _contentController,
-            'Notes, blockers, progress...',
+          AppTextField(
+            controller: _contentController,
+            hint: 'Notes, blockers, progress...',
             maxLines: 5,
           ),
           const SizedBox(height: 10),
-          _buildTextField(_tagsController, 'Tags: success, blockers...'),
-          const SizedBox(height: 16),
+          AppTextField(
+            controller: _tagsController,
+            hint: 'Tags: success, blockers...',
+          ),
+          const SizedBox(height: AppDimensions.paddingLarge),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
                 if (_titleController.text.isEmpty ||
                     _contentController.text.isEmpty) return;
-                await state.addWriteup(
-                  _titleController.text,
-                  _contentController.text,
-                  _tagsController.text.isEmpty
-                      ? null
-                      : _tagsController.text,
-                );
-                _titleController.clear();
-                _contentController.clear();
-                _tagsController.clear();
-                setState(() => _showForm = false);
+                final tags = _tagsController.text.isEmpty
+                    ? null
+                    : _tagsController.text;
+                if (isEditing) {
+                  await state.updateWriteup(
+                    _editingWriteupId!,
+                    _titleController.text,
+                    _contentController.text,
+                    tags,
+                  );
+                } else {
+                  await state.addWriteup(
+                    _titleController.text,
+                    _contentController.text,
+                    tags,
+                  );
+                }
+                _cancelForm();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                 ),
               ),
-              child: const Text(
-                'Post Note',
-                style: TextStyle(fontWeight: FontWeight.w600),
+              child: Text(
+                isEditing ? AppStrings.updateNote : AppStrings.postNote,
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -199,13 +221,9 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
   }
 
   Widget _buildWriteupCard(dynamic writeup, AppState state) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.06)),
-      ),
+    return AppCard(
+      borderRadius: AppDimensions.borderRadiusXL,
+      padding: const EdgeInsets.all(AppDimensions.paddingXL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -214,16 +232,14 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: AppColors.fillMedium,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.07),
-                  ),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
                 child: Icon(
                   Icons.person_outline,
-                  size: 14,
-                  color: Colors.white.withOpacity(0.4),
+                  size: AppDimensions.iconSmall,
+                  color: AppColors.iconDefault,
                 ),
               ),
               const SizedBox(width: 10),
@@ -234,52 +250,56 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
                     Text(
                       '@${writeup.username}',
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontSize: AppDimensions.fontSizeLarge,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
                       _formatDate(writeup.createdAt),
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.25),
-                        fontSize: 10,
+                        color: AppColors.textSubtle,
+                        fontSize: AppDimensions.fontSizeXS,
                       ),
                     ),
                   ],
                 ),
               ),
-              if (writeup.userId == 1)
+              if (writeup.userId == 1) ...[
+                IconButton(
+                  onPressed: () => _startEdit(writeup),
+                  icon: Icon(
+                    Icons.edit_outlined,
+                    size: AppDimensions.iconMedium,
+                    color: AppColors.iconFaint,
+                  ),
+                ),
                 IconButton(
                   onPressed: () async {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        backgroundColor: const Color(0xFF111111),
+                        backgroundColor: AppColors.surface,
                         title: const Text(
-                          'Delete Writeup',
-                          style: TextStyle(color: Colors.white),
+                          AppStrings.deleteWriteup,
+                          style: TextStyle(color: AppColors.textPrimary),
                         ),
                         content: Text(
                           'This writeup will be permanently removed.',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                          ),
+                          style: TextStyle(color: AppColors.textSecondary),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context, false),
                             child: Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
+                              AppStrings.cancel,
+                              style: TextStyle(color: AppColors.textTertiary),
                             ),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
                             child: const Text(
-                              'Delete',
+                              AppStrings.delete,
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
@@ -292,34 +312,35 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
                   },
                   icon: Icon(
                     Icons.delete_outline,
-                    size: 18,
-                    color: Colors.white.withOpacity(0.2),
+                    size: AppDimensions.iconMedium,
+                    color: AppColors.iconFaint,
                   ),
                 ),
+              ],
             ],
           ),
           const SizedBox(height: 12),
           Text(
             writeup.title,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
+              color: AppColors.textPrimary,
+              fontSize: AppDimensions.fontSizeXL,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppDimensions.paddingLarge),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.02),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              color: AppColors.fill,
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
+              border: Border.all(color: AppColors.borderLight),
             ),
             child: Text(
               writeup.content,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 13,
+                color: AppColors.textSecondary,
+                fontSize: AppDimensions.fontSizeMedium,
                 height: 1.5,
               ),
             ),
@@ -333,41 +354,8 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
                   .split(',')
                   .map((tag) => tag.trim())
                   .where((tag) => tag.isNotEmpty)
-                  .map((tag) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.03),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.07),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.label_outline,
-                        size: 10,
-                        color: Colors.white.withOpacity(0.3),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        tag.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.3),
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+                  .map((tag) => AppBadge(text: tag, icon: Icons.label_outline))
+                  .toList(),
             ),
           ],
         ],
@@ -388,36 +376,5 @@ class _WriteupsBoardScreenState extends State<WriteupsBoardScreen> {
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     return names[month];
-  }
-
-  Widget _buildTextField(TextEditingController controller, String hint,
-      {int maxLines = 1}) {
-    return TextField(
-      controller: controller,
-      maxLines: maxLines,
-      style: const TextStyle(color: Colors.white, fontSize: 13),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
-        filled: true,
-        fillColor: Colors.white.withOpacity(0.03),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 10,
-        ),
-      ),
-    );
   }
 }

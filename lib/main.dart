@@ -6,6 +6,7 @@ import 'screens/dashboard.dart';
 import 'screens/rules_manager.dart';
 import 'screens/writeups_board.dart';
 import 'screens/analytics.dart';
+import 'constants.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,16 +24,15 @@ class NexusTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Nexus Tracker',
+      title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF080808),
-        colorScheme: const ColorScheme.dark(
+        scaffoldBackgroundColor: AppColors.background,
+        colorScheme: ColorScheme.dark(
           primary: Colors.white,
           secondary: Colors.white,
-          surface: Color(0xFF080808),
-          background: Color(0xFF080808),
+          surface: AppColors.background,
         ),
         fontFamily: 'Inter',
       ),
