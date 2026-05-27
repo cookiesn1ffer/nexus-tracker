@@ -4,7 +4,7 @@
 #define MyAppName "Nexus Tracker"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "cookiesn1ffer"
-#define MyAppURL "https://github.com/yourusername/nexus-tracker"
+#define MyAppURL "https://github.com/cookiesn1ffer/nexus-tracker"
 #define MyAppExeName "nexus_tracker.exe"
 
 [Setup]
