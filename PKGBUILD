@@ -1,6 +1,6 @@
 # Maintainer: CookieSn1ffer <230327296+cookiesn1ffer@users.noreply.github.com>
 pkgname=nexus-tracker
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="Personal Accountability App"
 arch=('x86_64')
