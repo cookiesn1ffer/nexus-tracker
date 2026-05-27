@@ -76,9 +76,13 @@ Now pick your platform below.
 
 ## Windows
 
-### Install from GitHub Release
+### Install from GitHub Release (Recommended)
 
-Download `Nexus Tracker Setup 1.0.0.exe` from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases).
+Download `Nexus Tracker Setup 1.1.0.exe` from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases).
+
+1. Run the installer
+2. Follow the setup wizard
+3. Launch from Start Menu or Desktop shortcut
 
 ### Build from Source
 
