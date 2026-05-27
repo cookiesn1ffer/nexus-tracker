@@ -145,9 +145,46 @@ Then run:
 nexus_tracker
 ```
 
-### Install from GitHub Release
+### Install from AppImage (Any Distribution)
 
-Download the latest release from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases).
+AppImage is a portable format that works on any Linux distribution without installation.
+
+1. Download `nexus-tracker-1.1.0-x86_64.AppImage` from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases)
+2. Make it executable:
+   ```bash
+   chmod +x nexus-tracker-1.1.0-x86_64.AppImage
+   ```
+3. Run it:
+   ```bash
+   ./nexus-tracker-1.1.0-x86_64.AppImage
+   ```
+
+**Optional:** Move to a permanent location and create a desktop shortcut:
+```bash
+mkdir -p ~/Applications
+mv nexus-tracker-1.1.0-x86_64.AppImage ~/Applications/
+cd ~/Applications
+./nexus-tracker-1.1.0-x86_64.AppImage --appimage-extract
+cp squashfs-root/nexus-tracker.desktop ~/.local/share/applications/
+sed -i "s|Exec=nexus_tracker|Exec=$HOME/Applications/nexus-tracker-1.1.0-x86_64.AppImage|" ~/.local/share/applications/nexus-tracker.desktop
+```
+
+### Install from .deb (Debian/Ubuntu)
+
+1. Download `nexus-tracker_1.1.0_amd64.deb` from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases)
+2. Install it:
+   ```bash
+   sudo dpkg -i nexus-tracker_1.1.0_amd64.deb
+   sudo apt-get install -f  # Install dependencies if needed
+   ```
+3. Run it:
+   ```bash
+   nexus_tracker
+   ```
+
+### Install from Flatpak (Any Distribution)
+
+**Note:** Flatpak support requires building from source. See the packaging directory for build instructions.
 
 ### Build from Source
 

@@ -1,0 +1,40 @@
+app-id: com.nexustracker.app
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: nexus_tracker
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=home
+modules:
+  - name: nexus-tracker
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/bin
+      - mkdir -p /app/share/applications
+      - mkdir -p /app/share/icons/hicolor/256x256/apps
+      - mkdir -p /app/share/icons/hicolor/128x128/apps
+      - mkdir -p /app/share/icons/hicolor/64x64/apps
+      - mkdir -p /app/share/icons/hicolor/48x48/apps
+      - cp -r bundle/* /app/bin/
+      - install -Dm644 nexus-tracker.desktop /app/share/applications/com.nexustracker.app.desktop
+      - install -Dm644 nexus-tracker-256.png /app/share/icons/hicolor/256x256/apps/com.nexustracker.app.png
+      - install -Dm644 nexus-tracker-128.png /app/share/icons/hicolor/128x128/apps/com.nexustracker.app.png
+      - install -Dm644 nexus-tracker-64.png /app/share/icons/hicolor/64x64/apps/com.nexustracker.app.png
+      - install -Dm644 nexus-tracker-48.png /app/share/icons/hicolor/48x48/apps/com.nexustracker.app.png
+    sources:
+      - type: archive
+        path: bundle.tar.gz
+      - type: file
+        path: nexus-tracker.desktop
+      - type: file
+        path: icons/nexus-tracker-256.png
+      - type: file
+        path: icons/nexus-tracker-128.png
+      - type: file
+        path: icons/nexus-tracker-64.png
+      - type: file
+        path: icons/nexus-tracker-48.png

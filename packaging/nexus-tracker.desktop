@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Nexus Tracker
+Comment=Personal Accountability App
+Exec=nexus_tracker
+Icon=nexus-tracker
+Type=Application
+Categories=Utility;
+Keywords=tracker;habits;accountability;productivity;
+Terminal=false
+StartupNotify=true
