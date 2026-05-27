@@ -65,7 +65,7 @@ flutter doctor
 ### Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/nexus-tracker.git
+git clone https://github.com/cookiesn1ffer/nexus-tracker.git
 cd nexus-tracker
 flutter pub get
 ```
@@ -76,7 +76,13 @@ Now pick your platform below.
 
 ## Windows
 
-### Step 1: Enable Developer Mode
+### Install from GitHub Release
+
+Download `Nexus Tracker Setup 1.0.0.exe` from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases).
+
+### Build from Source
+
+#### Step 1: Enable Developer Mode
 
 Windows needs Developer Mode so Flutter can create symlinks during the build.
 
@@ -128,7 +134,24 @@ build/windows/x64/runner/Release/nexus_tracker.exe
 
 ## Linux
 
-### Step 1: Install build dependencies
+### Install from AUR (Arch Linux)
+
+```bash
+yay -S nexus-tracker
+```
+
+Then run:
+```bash
+nexus_tracker
+```
+
+### Install from GitHub Release
+
+Download the latest release from [GitHub Releases](https://github.com/cookiesn1ffer/nexus-tracker/releases).
+
+### Build from Source
+
+#### Step 1: Install build dependencies
 
 **Ubuntu / Debian:**
 ```bash
@@ -146,7 +169,7 @@ sudo dnf install -y clang cmake ninja-build pkgconfig gtk3-devel libblkid-devel 
 sudo pacman -S clang cmake ninja pkgconf gtk3 util-linux-libs
 ```
 
-### Step 2: Build
+#### Step 2: Build
 
 ```bash
 cd nexus-tracker
@@ -155,7 +178,7 @@ cd nexus-tracker
 flutter build linux --release
 ```
 
-### Step 3: Run
+#### Step 3: Run
 
 ```bash
 # Run directly
